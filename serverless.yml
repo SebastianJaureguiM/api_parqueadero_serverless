@@ -1,0 +1,37 @@
+org: sebastianjm
+app: aws-lambda-api-parqueadero
+service: aws-lambda-api-parqueadero
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action: 
+        - dynamobd:*
+      Resource:
+        - arn:aws:dynamodb:us-east-2:528608382046:table/users_parking
+
+functions:
+  hello:
+    handler: src/hello.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
+
+resources:
+  Resources:
+    UserTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: users_parking
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions: 
+          - AttributeName: id
+            AttributeType: S
+        KeySchema: 
+          - AttributeName: id
+            KeyType: HASH
