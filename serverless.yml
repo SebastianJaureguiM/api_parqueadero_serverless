@@ -10,17 +10,41 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action: 
-        - dynamobd:*
+        - dynamodb:*
       Resource:
         - arn:aws:dynamodb:us-east-2:528608382046:table/users_parking
 
 functions:
-  hello:
-    handler: src/hello.hello
+  createUser:
+    handler: src/createUser.main
     events:
       - httpApi:
-          path: /
+          path: /createUser
+          method: post
+  getUsers:
+    handler: src/getUsers.main
+    events:
+      - httpApi:
+          path: /getUsers
           method: get
+  getUser:
+    handler: src/getUser.main
+    events:
+      - httpApi:
+          path: /getUser/{id}
+          method: get
+  updateUser:
+    handler: src/updateUser.main
+    events:
+      - httpApi:
+          path: /updateUser/{id}
+          method: put
+  deleteUser:
+    handler: src/deleteUser.main
+    events:
+      - httpApi:
+          path: /deleteUser/{id}
+          method: delete
 
 resources:
   Resources:
