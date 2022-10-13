@@ -7,13 +7,17 @@ provider:
   name: aws
   runtime: nodejs14.x
   region: us-east-2
+  apiGateway:
+    description: ''
+    shouldStartNameWithService: false
+    metrics: true
 
 functions:
   createUser:
     handler: src/createUser.main
     role: RolAdmin
     events:
-      - httpApi:
+      - http:
           path: /createUser
           method: post
   getUsers:
@@ -49,8 +53,8 @@ functions:
     role: RolAdmin
     events:
       - httpApi:
-        path: /getImageUser
-        method: get
+          path: /getImageUser
+          method: get
 
 resources:
   Resources:
@@ -89,6 +93,7 @@ resources:
                     - s3:GetObject
                     - s3:GetObjectVersion
                     - s3:ListBucket
+                    - s3:ListAllMyBuckets
                   Resource: arn:aws:s3:::bucket-prueba-parking
     UserTable:
       Type: AWS::DynamoDB::Table
