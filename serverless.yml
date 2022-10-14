@@ -24,35 +24,35 @@ functions:
     handler: src/getUsers.main
     role: RolAdmin
     events:
-      - httpApi:
+      - http:
           path: /getUsers
           method: get
   getUser:
     handler: src/getUser.main
     role: RolAdmin
     events:
-      - httpApi:
+      - http:
           path: /getUser/{id}
           method: get
   updateUser:
     handler: src/updateUser.main
     role: RolAdmin
     events:
-      - httpApi:
+      - http:
           path: /updateUser/{id}
           method: put
   deleteUser:
     handler: src/deleteUser.main
     role: RolAdmin
     events:
-      - httpApi:
+      - http:
           path: /deleteUser/{id}
           method: delete
   getImageUser:
     handler: src/getImageUser.main
     role: RolAdmin
     events:
-      - httpApi:
+      - http:
           path: /getImageUser
           method: get
 
@@ -94,7 +94,8 @@ resources:
                     - s3:GetObjectVersion
                     - s3:ListBucket
                     - s3:ListAllMyBuckets
-                  Resource: arn:aws:s3:::bucket-prueba-parking
+                  Resource: 
+                    - arn:aws:s3:::bucket-prueba-parking
     UserTable:
       Type: AWS::DynamoDB::Table
       Properties:

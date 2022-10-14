@@ -17,10 +17,6 @@ module.exports.main = async (event) => {
         }
     })
 
-   /*
-    const params = {Bucket: 'bucket-prueba-parking', Key: '8b167af653c2399dd93b952a48740620.jpg'}
-    const url = s3.getSignedUrl('getObject', params)
-    */
     return {
         statusCode:200,
         body:JSON.stringify({
