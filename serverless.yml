@@ -11,6 +11,8 @@ provider:
     description: ''
     shouldStartNameWithService: false
     metrics: true
+  environment:
+    SQS_QUEUE_URL: { Ref: NewSQSQueue}
 
 functions:
   createUser:
@@ -55,6 +57,25 @@ functions:
       - http:
           path: /getImageUser
           method: get
+  uploadImage:
+    handler: src/uploadImage.main
+    role: RolAdmin
+    events:
+      - http:
+          path: /uploadImage
+          method: post
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - NewSQSQueue
+              - Arn
+  updateImageUserEvent:
+    handler: src/updateImageUserEvent.main
+    role: RolAdmin
+    events:
+      - http:
+          path: /updateImageUserEvent
+          method: put
 
 resources:
   Resources:
@@ -96,6 +117,18 @@ resources:
                     - s3:ListAllMyBuckets
                   Resource: 
                     - arn:aws:s3:::bucket-prueba-parking
+                - Effect: Allow
+                  Action: 
+                    - sqs:SendMessage
+                    - sqs:GetQueueUrl
+                    - sqs:ListQueues
+                  Resource: 
+                    Fn::GetAtt: [NewSQSQueue, Arn]
+    NewSQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName:  sqs-queue-parking-test.fifo
+        FifoQueue:  true
     UserTable:
       Type: AWS::DynamoDB::Table
       Properties:
